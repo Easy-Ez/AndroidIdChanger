@@ -48,6 +48,8 @@ captures/
 .idea/caches
 .idea/modules.xml
 .idea/deploymentTargetDropDown.xml
+.idea/androidTestResultsUserPreferences.xml
+.idea/sonarlint
 # Comment next line if keeping position of elements in Navigation Editor is relevant for you
 .idea/navEditor.xml
 
