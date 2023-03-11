@@ -1,5 +1,6 @@
 package cc.wecando.idchanger
 
+import androidx.annotation.WorkerThread
 import cc.wecando.idchanger.entity.SettingsSecureIdEntity
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
@@ -8,7 +9,8 @@ interface IParseEngine {
     /**
      * parse content, whatever abx or xml file
      */
-    suspend fun parse(inputStream: InputStream): List<SettingsSecureIdEntity>
+    @WorkerThread
+    fun parse(inputStream: InputStream): List<SettingsSecureIdEntity>
 
     /**
      * default method
