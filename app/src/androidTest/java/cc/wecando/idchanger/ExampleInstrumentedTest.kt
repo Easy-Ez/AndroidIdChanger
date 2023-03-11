@@ -1,17 +1,13 @@
 package cc.wecando.idchanger
 
-import android.content.pm.ApplicationInfo
 import android.os.Build
 import android.util.Log
-import android.util.Xml
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.lsposed.hiddenapibypass.HiddenApiBypass
-import org.xmlpull.v1.XmlPullParser
-import java.io.InputStream
 
 
 /**
@@ -22,29 +18,28 @@ import java.io.InputStream
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
     @Test
-    fun useAppContext() {
+    fun useAppContext(): Unit = runBlocking {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("cc.wecando.idchanger", appContext.packageName)
-        val resolvePullParserMethod = HiddenApiBypass.getDeclaredMethod(
-            Xml::class.java, "resolvePullParser",
-            /*, args */
-            InputStream::class.java
-        )
-        Log.i("version", "version:${Build.VERSION.SDK_INT}")
-        val parser = resolvePullParserMethod.invoke(
-            null, appContext.assets.open("settings_ssaid.xml")
-        ) as XmlPullParser
-        var parserEventType = parser.eventType
-        while (parserEventType != XmlPullParser.END_DOCUMENT) {
-            if (parserEventType == XmlPullParser.START_TAG && parser.name.equals("setting")) {
-                val id = parser.getAttributeValue(null, "id")
-                val name = parser.getAttributeValue(null, "name")
-                val packageName = parser.getAttributeValue(null, "package")
-                Log.i("parser", "id:${id},name:${name},packageName:${packageName}")
-            }
-            parserEventType = parser.next()
+        val parseEngine = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+            ABXParseEngine()
+        } else {
+            XMLParseEngine()
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            appContext.assets.open("settings_ssaid.xml")
+        } else {
+            appContext.assets.open("settings_ssaid_legacy.xml")
+        }.use {
+            val settings = parseEngine.parse(it)
+            Log.i("debug", settings.joinToString())
+            val fetcher = AppInfoFetcher(packageManager = appContext.packageManager)
+            settings.forEach { setting ->
+                val appInfo = fetcher.fetchAppInfo(setting.packageName)
+                Log.i("debug", "applicationInfo#${appInfo}")
+            }
+        }
+
 
     }
 }

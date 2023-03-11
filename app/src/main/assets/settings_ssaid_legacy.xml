@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<settings version="-1">
+    <setting name="userkey" defaultSysSet="true"
+        defaultValue="739128470DF0C9C7723A3BE9542D0F5A932E1203F493A07191E826CFDBD3EDFA" id="0"
+        package="android" tag="null"
+        value="739128470DF0C9C7723A3BE9542D0F5A932E1203F493A07191E826CFDBD3EDFA" />
+    <setting name="10127" defaultSysSet="false" defaultValue="69df410706850a96" id="2"
+        package="com.google.android.videos" tag="null" value="69df410706850a96" />
+    <setting name="10129" defaultSysSet="false" defaultValue="0f4b4658a63f69bb" id="3"
+        package="com.android.chrome" tag="null" value="0f4b4658a63f69bb" />
+    <setting name="10143" defaultSysSet="false" defaultValue="9eaf2a7a7a605fcd" id="1"
+        package="com.google.android.calendar" tag="null" value="9eaf2a7a7a605fcd" />
+</settings>
