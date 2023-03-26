@@ -23,8 +23,7 @@ class LoadViewModel(private val application: Application) : AndroidViewModel(app
         const val FILE_PATH = "/data/system/users/0/settings_ssaid.xml"
     }
 
-    val liveData: MutableLiveData<
-            LiveDataState<List<AppEnhanceInfoEntity>>> = MutableLiveData()
+    val liveData: MutableLiveData<LiveDataState<List<AppEnhanceInfoEntity>>> = MutableLiveData()
 
     // 加载 android id 文件 => ssaidEntity
     // 分为Android 12 以下和其他,ABX 和 XML
@@ -46,24 +45,26 @@ class LoadViewModel(private val application: Application) : AndroidViewModel(app
             if (shell.isRoot) {
                 val duration = measureTime {
                     val inputStream = SuFileInputStream.open(SuFile.open(FILE_PATH))
-                    inputStream.use {
+                    inputStream.use { stream ->
                         val fetcher = AppInfoFetcher(packageManager = application.packageManager)
                         val enhanceInfoEntityList =
-                            parseEngine.parse(it).map { settingsSecureIdEntity ->
+                            parseEngine.parse(stream).filter { settingsSecureIdEntity ->
+                                settingsSecureIdEntity.packageName != "android"
+                            }.map { settingsSecureIdEntity ->
                                 async {
-                                    Log.d("LoadViewModel", "name:${Thread.currentThread().name}")
                                     val appInfo =
                                         fetcher.fetchAppInfo(settingsSecureIdEntity.packageName)
                                     AppEnhanceInfoEntity(
                                         appName = appInfo.appName,
                                         packageName = settingsSecureIdEntity.packageName,
                                         appVersionName = appInfo.appVersionName,
-                                        appIcon = appInfo.appIcon,
                                         originSSAID = settingsSecureIdEntity.value,
-                                        modifySSAID = "",
+                                        currentSSAID = "",
                                     )
                                 }
-                            }.awaitAll()
+                            }.awaitAll().sortedBy { appEnhanceInfoEntity ->
+                                appEnhanceInfoEntity.appName
+                            }
                         liveData.postValue(LiveDataState.Success(enhanceInfoEntityList))
                     }
                 }

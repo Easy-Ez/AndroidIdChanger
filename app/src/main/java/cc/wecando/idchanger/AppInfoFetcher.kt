@@ -2,6 +2,7 @@ package cc.wecando.idchanger
 
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.WorkerThread
 import cc.wecando.idchanger.entity.AppInfoEntity
 
 /**
@@ -12,6 +13,7 @@ class AppInfoFetcher(private val packageManager: PackageManager) {
      * 根据包名,获取 App 名称,版本名称,图标
      */
     @Throws(PackageManager.NameNotFoundException::class)
+    @WorkerThread
     fun fetchAppInfo(packageName: String): AppInfoEntity {
         val applicationInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             packageManager.getApplicationInfo(
@@ -33,12 +35,10 @@ class AppInfoFetcher(private val packageManager: PackageManager) {
         }
         val versionName = packageInfo.versionName
         val appName = packageManager.getApplicationLabel(applicationInfo)
-        val appIcon = packageManager.getApplicationIcon(applicationInfo)
+//        val appIcon = packageManager.getApplicationIcon(applicationInfo)
 
         return AppInfoEntity(
-            appName = appName.toString(),
-            appVersionName = versionName,
-            appIcon = appIcon
+            appName = appName.toString(), appVersionName = versionName
         )
     }
 }
