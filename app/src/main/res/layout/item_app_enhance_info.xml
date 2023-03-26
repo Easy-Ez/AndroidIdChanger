@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="80dp"
     android:layout_marginStart="12dp"
     android:layout_marginEnd="12dp"
     android:background="@drawable/bg_stroke_1"
@@ -13,13 +13,13 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/img_app_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:contentDescription="@string/desc_app_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@drawable/loading" />
 
     <TextView
         android:id="@+id/tv_app_name"
@@ -28,9 +28,11 @@
         android:layout_marginStart="12dp"
         android:ellipsize="end"
         android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@id/tv_package_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/img_app_icon"
         app:layout_constraintTop_toTopOf="@id/img_app_icon"
+        app:layout_constraintVertical_chainStyle="spread"
         tools:text="AppName - version: 5.3.0" />
 
     <TextView
@@ -39,15 +41,19 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@id/tv_current_ssaid"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tv_app_name"
         app:layout_constraintTop_toBottomOf="@id/tv_app_name"
         tools:text="PackageName: cc.wecando.ssddsdfffff 想西阿斯顿撒大家都讲按实际大技术对接大姐大姐说" />
 
     <TextView
-        android:id="@+id/tv_origin_ssaid"
+        android:id="@+id/tv_current_ssaid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="@id/img_app_icon"
         app:layout_constraintStart_toStartOf="@id/tv_app_name"
         app:layout_constraintTop_toBottomOf="@id/tv_package_name"
         tools:text="ID: xxss12ff1ss New Id: 假的教案设计的哈哈大师啊手机大数据" />
